@@ -11,6 +11,7 @@ const ERRID_RATE_LIMIT = "RATE_LIMITED"
 const ERRID_PROCESSING = "PROCESSING_ERROR"
 const ERRID_DECODING = "JSON_DECODING_ERROR"
 const ERRID_UNAUTHORIZED = "UNAUTHORIZED"
+const ERRID_UNSUPPORTED_METHOD = "UNSUPPORTED_METHOD"
 
 // Error types
 func RateLimitError(ip string) *VASError {
@@ -54,5 +55,23 @@ func UnauthorizedError(err error) *VASError {
 		ErrorDescription: &desc,
 		StatusCode:       http.StatusUnauthorized,
 		GoError:          err,
+	}
+}
+
+func UnsupportedMethodError(methodUsed string, allowedMethods []string) *VASError {
+	desc := "Allowed methods: "
+	for idx, method := range allowedMethods {
+		if idx == len(allowedMethods)-1 {
+			desc += method
+		} else {
+			desc += method + ", "
+		}
+	}
+	return &VASError{
+		ErrorId:          ERRID_UNSUPPORTED_METHOD,
+		ErrorName:        fmt.Sprintf("Unsupported method: %s", methodUsed),
+		ErrorDescription: &desc,
+		StatusCode:       http.StatusMethodNotAllowed,
+		GoError:          errors.New(fmt.Sprintf("client used an unsupported method, %s", methodUsed)),
 	}
 }
