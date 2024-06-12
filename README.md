@@ -1,2 +1,4 @@
 # VAS-error-handling-go
-Error handling library for the VAS project
+
+**This is for my personal VAS project**
+More about it: **Soon™**
