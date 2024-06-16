@@ -17,6 +17,8 @@ const ERRID_UNSUPPORTED_METHOD = "UNSUPPORTED_METHOD"
 const ERRID_INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
 const ERRID_MISSING_FIELD = "MISSING_FIELD"
 const ERRID_INVALID_DATA = "INVALID_DATA"
+const ERRID_INVALID_PASSWORD = "INVALID_PASSWORD"
+const ERRID_PASSWORD_TOO_LONG = "PASSWORD_TOO_LONG"
 
 // Error types
 func RateLimitError(ip string) *VASError {
@@ -132,5 +134,24 @@ func InvalidDataError(field string, err error) *VASError {
 		ErrorDescription: &desc,
 		StatusCode:       http.StatusNotAcceptable,
 		GoError:          err,
+	}
+}
+func InvalidPasswordError(passwordRules string) *VASError {
+	return &VASError{
+		ErrorId:          ERRID_INVALID_PASSWORD,
+		ErrorName:        "Invalid password",
+		ErrorDescription: &passwordRules,
+		StatusCode:       http.StatusNotAcceptable,
+		GoError:          nil,
+	}
+}
+
+func PasswordTooLongError() *VASError {
+	return &VASError{
+		ErrorId:          ERRID_PASSWORD_TOO_LONG,
+		ErrorName:        "Entered password is too long",
+		ErrorDescription: nil,
+		StatusCode:       http.StatusNotAcceptable,
+		GoError:          nil,
 	}
 }
