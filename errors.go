@@ -15,6 +15,7 @@ const ERRID_DECODING = "JSON_DECODING_ERROR"
 const ERRID_UNAUTHORIZED = "UNAUTHORIZED"
 const ERRID_UNSUPPORTED_METHOD = "UNSUPPORTED_METHOD"
 const ERRID_INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
+const ERRID_MISSING_FIELD = "MISSING_FIELD"
 const ERRID_INVALID_DATA = "INVALID_DATA"
 
 // Error types
@@ -113,7 +114,16 @@ func InvalidCredentialsError(err error) *VASError {
 		GoError:          err,
 	}
 }
-
+func MissingFieldError(field string) *VASError {
+	desc := fmt.Sprintf("Applies to field '%s'", field)
+	return &VASError{
+		ErrorId:          ERRID_MISSING_FIELD,
+		ErrorName:        "Missing field in input data found while processing your request",
+		ErrorDescription: &desc,
+		StatusCode:       http.StatusBadRequest,
+		GoError:          nil,
+	}
+}
 func InvalidDataError(field string, err error) *VASError {
 	desc := fmt.Sprintf("Applies to field '%s'", field)
 	return &VASError{
@@ -121,6 +131,6 @@ func InvalidDataError(field string, err error) *VASError {
 		ErrorName:        "Invalid input data found while processing your request",
 		ErrorDescription: &desc,
 		StatusCode:       http.StatusNotAcceptable,
-		GoError:          nil,
+		GoError:          err,
 	}
 }
