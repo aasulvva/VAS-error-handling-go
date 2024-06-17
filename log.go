@@ -18,6 +18,7 @@ func LogError(w http.ResponseWriter, vasErr *VASError) {
 		GoError:          nil,
 	}
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(int(vasErr.StatusCode))
 	err := json.NewEncoder(w).Encode(clientErr)
 	if err != nil {
 		log.Println("[ERROR] Encoding JSON:", err)
