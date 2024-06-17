@@ -170,13 +170,13 @@ func ObjectConflictError(objectType string, name string) *VASError {
 	}
 }
 
-func ObjectNotFoundError(objectType string, name string) *VASError {
+func ObjectNotFoundError(objectType string, name string, err error) *VASError {
 	desc := fmt.Sprintf("Please try a different name/identifier!")
 	return &VASError{
 		ErrorId:          ERRID_OBJECT_NOT_FOUND,
 		ErrorName:        fmt.Sprintf("A(n) %s with name/identifier %s was not found!", objectType, name),
 		ErrorDescription: &desc,
 		StatusCode:       http.StatusNotFound,
-		GoError:          errors.New(fmt.Sprintf("%s with name/identifier %s does not exist", objectType, name)),
+		GoError:          err,
 	}
 }
