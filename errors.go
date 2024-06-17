@@ -19,6 +19,7 @@ const ERRID_MISSING_FIELD = "MISSING_FIELD"
 const ERRID_INVALID_DATA = "INVALID_DATA"
 const ERRID_INVALID_PASSWORD = "INVALID_PASSWORD"
 const ERRID_PASSWORD_TOO_LONG = "PASSWORD_TOO_LONG"
+const ERRID_OBJECT_CONFLICT = "OBJECT_CONFLICT"
 
 // Error types
 func RateLimitError(ip string) *VASError {
@@ -153,5 +154,16 @@ func PasswordTooLongError() *VASError {
 		ErrorDescription: nil,
 		StatusCode:       http.StatusNotAcceptable,
 		GoError:          nil,
+	}
+}
+
+func ObjectConflictError(objectType string, name string) *VASError {
+	desc := fmt.Sprintf("Please try a different name/identifier!")
+	return &VASError{
+		ErrorId:          ERRID_OBJECT_CONFLICT,
+		ErrorName:        fmt.Sprintf("A(n) %s with name/identifier %s already exists!", objectType, name),
+		ErrorDescription: &desc,
+		StatusCode:       http.StatusConflict,
+		GoError:          errors.New(fmt.Sprintf("%s with name/identifier %s already exists", objectType, name)),
 	}
 }
